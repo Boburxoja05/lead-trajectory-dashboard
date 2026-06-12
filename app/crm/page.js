@@ -10,11 +10,14 @@ import LeadQuality from "@/components/LeadQuality";
 import LeadAging from "@/components/LeadAging";
 import ActivityInsights from "@/components/ActivityInsights";
 import ManagerRating from "@/components/ManagerRating";
+import CampaignRisk from "@/components/CampaignRisk";
 import SalesExtraBlocks from "@/components/SalesExtraBlocks";
 
 import {
   lidlar,
   lidStatuslari,
+  kampaniyalar,
+  rejaKpi,
 } from "@/data/demoData";
 
 import {
@@ -63,11 +66,15 @@ export default function CRMPage() {
   const menejerlar = menejerReyting(filteredLidlar);
   const lostData  = pulYoqotish(filteredLidlar, 500);
 
+  const riskKampaniyalar = kampaniyalar.filter(
+    (k) => k.tushum === 0 || (k.tushum > 0 && k.tushum / k.xarajat < 1)
+  );
+
   const alertData = {
     zeroSalesManagers: menejerlar.filter((m) => m.sotuv === 0).length,
-    zeroRoasCampaigns: 0,
+    zeroRoasCampaigns: riskKampaniyalar.length,
     noAnswerLeads: filteredLidlar.filter((l) => l.sifat === "No Answer").length,
-    planCr: 9,
+    planCr: rejaKpi.cr,
     factCr: kpi.cr,
   };
 
@@ -202,6 +209,13 @@ export default function CRMPage() {
 
       {/* Manager rating */}
       <ManagerRating data={menejerlar} />
+
+      {/* Campaign risk */}
+      <CampaignRisk
+        data={riskKampaniyalar}
+        title="⚠ Risk kampaniyalar"
+        subtitle="Daromad keltirmayotgan yoki ROAS < 1 bo'lgan kampaniyalar"
+      />
 
       {/* Follow-up & response */}
       <SalesExtraBlocks />

@@ -16,20 +16,24 @@ const ismlar = [
   "Sarvar", "Nilufar", "Akmal", "Murod", "Sevara", "Javohir",
 ];
 
-const manbalar = ["Facebook", "Instagram", "Messenger"];
+// "Sayt" replaced Messenger
+const manbalar = ["Facebook", "Instagram", "Sayt"];
 
 const menejerlarRoyxat = [
   "Jasur T.", "Alisher K.", "Sardor N.", "Aziz M.",
-  "Bekzod R.", "Umid S.", "Diyor A.", "Murod F.",
+  "Bekzod R.", "Umid S.",
+  "Diyor A.",  // 0 sotuv
+  "Murod F.",  // 0 sotuv
 ];
 
+// "Lid" prefixed campaign names
 const kampaniyalarRoyxat = [
-  "Awareness — Video 01",
-  "Lead Gen — Kurs Promo",
-  "Retargeting — Warm Audience",
-  "Conversion — Special Offer",
-  "Lookalike — LG 3%",
-  "Brand — Story Ads",
+  "Lid Gen — Video 01",
+  "Lid Gen — Kurs Promo",
+  "Lid — Retargeting Warm",
+  "Lid — Special Offer",
+  "Lid — Lookalike 3%",   // zaif kampaniya (0 sotuv)
+  "Lid — Story Ads",      // zaif kampaniya (0 sotuv)
 ];
 
 const kreativlarRoyxat = [
@@ -75,18 +79,34 @@ function tushumYarat(status, index) {
 }
 
 export const lidlar = Array.from({ length: 1000 }, (_, index) => {
-  const status = statusYarat(index);
+  const menejerIdx  = index % menejerlarRoyxat.length;   // 0–7
+  const kampaniyaIdx = index % kampaniyalarRoyxat.length; // 0–5
+
+  const menejer  = menejerlarRoyxat[menejerIdx];
+  const kampaniya = kampaniyalarRoyxat[kampaniyaIdx];
+
+  let status = statusYarat(index);
+
+  // Diyor A. (idx 6) va Murod F. (idx 7) — 0 sotuv
+  const zeroSalesMenejer = menejerIdx >= 6;
+  // So'nggi 2 kampaniya — 0 sotuv (risk kampaniyalar)
+  const zeroSalesKampaniya = kampaniyaIdx >= 4;
+
+  if ((zeroSalesMenejer || zeroSalesKampaniya) && status === "Sotuv") {
+    status = "To‘lov kutilmoqda";
+  }
+
   return {
     id: index + 1,
     sana: sanaYarat(index),
-    kampaniya: kampaniyalarRoyxat[index % kampaniyalarRoyxat.length],
+    kampaniya,
     kreativ: kreativlarRoyxat[index % kreativlarRoyxat.length],
     manba: manbalar[index % manbalar.length],
     ism: ismlar[index % ismlar.length],
     telefon: `+998 9${index % 9} *** ** ${String(index % 100).padStart(2, "0")}`,
     status,
     sifat: sifatYarat(index),
-    menejer: menejerlarRoyxat[index % menejerlarRoyxat.length],
+    menejer,
     xarajat: xarajatYarat(index),
     tushum: tushumYarat(status, index),
   };
@@ -116,12 +136,13 @@ function guruhla(data, key) {
 }
 
 export const kampaniyalar = guruhla(lidlar, "kampaniya");
-export const kreativlar  = guruhla(lidlar, "kreativ");
+export const kreativlar   = guruhla(lidlar, "kreativ");
 
+// Reja qasddan faktdan yuqori — plan vs fact farqini ko'rsatish uchun
 export const rejaKpi = {
-  lid:   1000,
-  cpl:   3.0,
-  sotuv: 90,
-  cr:    9,
-  roas:  6,
+  lid:   1200,  // fakt ~1000
+  cpl:   2.2,   // fakt ~3.5–3.8 (qimmatroq)
+  sotuv: 120,   // fakt ~50–60
+  cr:    12,    // fakt ~6–7%
+  roas:  12,    // fakt ~8–10x
 };

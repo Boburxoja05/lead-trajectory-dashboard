@@ -1,11 +1,13 @@
 import { pulQiymat, lidNarxi, mijozNarxi, rentabellik } from "@/utils/calculations";
 
-export default function CampaignRisk({ data }) {
+export default function CampaignRisk({ data, title, subtitle }) {
   return (
     <div className="card p-5 overflow-x-auto">
-      <h2 className="card-title" style={{ marginBottom: 4 }}>Kampaniyalar bo'yicha tahlil</h2>
+      <h2 className="card-title" style={{ marginBottom: 4 }}>
+        {title || "Kampaniyalar bo'yicha tahlil"}
+      </h2>
       <p className="card-subtitle" style={{ marginBottom: 16 }}>
-        Har bir kampaniyaning xarajat, lid va ROAS ko'rsatkichlari
+        {subtitle || "Har bir kampaniyaning xarajat, lid va ROAS ko'rsatkichlari"}
       </p>
 
       <table className="table-dark" style={{ minWidth: 860 }}>
