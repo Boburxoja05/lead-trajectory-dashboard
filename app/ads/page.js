@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import KPIComparisonChart from "@/components/KPIComparisonChart";
 import TrendCharts from "@/components/TrendCharts";
@@ -92,6 +92,12 @@ function CreativeTable({ data }) {
 
 export default function AdsPage() {
   const [davr, setDavr] = useState("30 kun");
+  const [plans, setPlans] = useState([]);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("dashboardPlans");
+    if (saved) setPlans(JSON.parse(saved));
+  }, []);
 
   const filteredLidlar = useMemo(() => filterByDavr(lidlar, davr), [davr]);
 
@@ -188,7 +194,7 @@ export default function AdsPage() {
       <KPIComparisonChart reja={rejaKpi} fakt={kpi} />
 
       {/* Trend charts */}
-      <TrendCharts data={trend} />
+      <TrendCharts data={trend} plans={plans} />
 
       {/* Campaign table */}
       <CampaignRisk data={kampaniyalar} />

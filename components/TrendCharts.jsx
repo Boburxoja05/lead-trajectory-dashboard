@@ -40,12 +40,33 @@ function CustomTooltip({ active, payload, label, valueType }) {
   );
 }
 
-function ChartCard({ title, description, data, dataKey, plans, kompaniya, valueType = "number" }) {
-  const chartData = data.map((item) => ({
-    ...item,
-    fakt: item[dataKey],
-    reja: 0,
-  }));
+function getPlanForDate(plans, sana, key) {
+  const plan = plans.find(
+    (p) => sana >= p.sanaBoshlanish && sana <= p.sanaTugash
+  );
+  if (!plan) return undefined;
+  const map = {
+    lid:    Number(plan.leadReja  || 0),
+    cpl:    Number(plan.cplReja   || 0),
+    sotuv:  Number(plan.sotuvReja || 0),
+    tushum: Number(plan.tushumReja|| 0),
+  };
+  return map[key] ?? 0;
+}
+
+function ChartCard({ title, description, data, dataKey, plans, valueType = "number" }) {
+  const hasPlans = plans.some(
+    (p) => data.some((d) => d.sana >= p.sanaBoshlanish && d.sana <= p.sanaTugash)
+  );
+
+  const chartData = data.map((item) => {
+    const rejaVal = getPlanForDate(plans, item.sana, dataKey);
+    return {
+      ...item,
+      fakt: item[dataKey],
+      ...(rejaVal !== undefined ? { reja: rejaVal } : {}),
+    };
+  });
 
   return (
     <div className="card p-5">
@@ -59,18 +80,23 @@ function ChartCard({ title, description, data, dataKey, plans, kompaniya, valueT
             <XAxis dataKey="sanaLabel" tick={{ fontSize: 10, fill: "var(--muted)" }} />
             <YAxis tick={{ fontSize: 10, fill: "var(--muted)" }} />
             <Tooltip content={<CustomTooltip valueType={valueType} />} />
-            <Legend
-              wrapperStyle={{ fontSize: 11, color: "var(--muted)" }}
-              formatter={(v) => (v === "fakt" ? "Fakt" : "Reja")}
-            />
-            <Line
-              dataKey="reja"
-              name="reja"
-              stroke="var(--muted)"
-              strokeWidth={1.5}
-              strokeDasharray="5 5"
-              dot={false}
-            />
+            {hasPlans && (
+              <Legend
+                wrapperStyle={{ fontSize: 11, color: "var(--muted)" }}
+                formatter={(v) => (v === "fakt" ? "Fakt" : "Reja")}
+              />
+            )}
+            {hasPlans && (
+              <Line
+                dataKey="reja"
+                name="reja"
+                stroke="var(--accent)"
+                strokeWidth={1.5}
+                strokeDasharray="5 5"
+                dot={false}
+                connectNulls={false}
+              />
+            )}
             <Line
               dataKey="fakt"
               name="fakt"
@@ -86,21 +112,23 @@ function ChartCard({ title, description, data, dataKey, plans, kompaniya, valueT
   );
 }
 
-export default function TrendCharts({ data, plans = [], kompaniya = "Hammasi" }) {
+export default function TrendCharts({ data, plans = [] }) {
   return (
     <section>
       <h2 style={{ color: "#fff", fontWeight: 700, fontSize: 16, marginBottom: 4 }}>
         Kunlik dinamika
       </h2>
       <p className="muted-text" style={{ fontSize: 12, marginBottom: 14 }}>
-        Fakt natijalarning kunlik o'zgarishi
+        {plans.length
+          ? "Fakt natijalar sozlamalardagi reja bilan solishtiriladi"
+          : "Fakt natijalarning kunlik o'zgarishi · Reja uchun Sozlamalar bo'limidan plan kiriting"}
       </p>
 
       <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
-        <ChartCard title="Kunlik lidlar" description="Kunlik tushgan lidlar soni" data={data} dataKey="lid" plans={plans} kompaniya={kompaniya} />
-        <ChartCard title="CPL dinamikasi" description="Kunlik lid narxi ($)" data={data} dataKey="cpl" plans={plans} kompaniya={kompaniya} valueType="money" />
-        <ChartCard title="Sotuv dinamikasi" description="Kunlik yopilgan bitimlar" data={data} dataKey="sotuv" plans={plans} kompaniya={kompaniya} />
-        <ChartCard title="Revenue dinamikasi" description="Kunlik tushum ($)" data={data} dataKey="tushum" plans={plans} kompaniya={kompaniya} valueType="money" />
+        <ChartCard title="Kunlik lidlar"    description="Kunlik tushgan lidlar soni"   data={data} dataKey="lid"    plans={plans} />
+        <ChartCard title="CPL dinamikasi"   description="Kunlik lid narxi ($)"         data={data} dataKey="cpl"   plans={plans} valueType="money" />
+        <ChartCard title="Sotuv dinamikasi" description="Kunlik yopilgan bitimlar"     data={data} dataKey="sotuv" plans={plans} />
+        <ChartCard title="Revenue dinamikasi" description="Kunlik tushum ($)"          data={data} dataKey="tushum" plans={plans} valueType="money" />
       </div>
     </section>
   );
