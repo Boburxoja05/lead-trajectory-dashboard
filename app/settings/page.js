@@ -3,31 +3,36 @@ import PlanSettings from "@/components/PlanSettings";
 
 export default function SettingsPage() {
   return (
-    <main className="min-h-screen bg-slate-100 p-4">
-      <div className="mx-auto max-w-[1600px] space-y-4">
-        <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-slate-950">
-                Sozlamalar
-              </h1>
-
-              <p className="mt-2 text-slate-500">
-                Reja qiymatlarini boshqarish bo‘limi
-              </p>
-            </div>
-
-            <Link
-              href="/"
-              className="rounded-xl bg-blue-600 px-6 py-3 font-bold text-white transition hover:bg-blue-700"
-            >
-              Dashboardga qaytish
-            </Link>
-          </div>
-        </section>
-
-        <PlanSettings />
+    <div className="page-wrap" style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+      <div
+        className="card"
+        style={{ padding: "20px 24px", display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", gap: 12 }}
+      >
+        <div>
+          <h1 style={{ color: "#fff", fontWeight: 800, fontSize: 22, letterSpacing: "-0.03em", margin: 0 }}>
+            Sozlamalar
+          </h1>
+          <p className="muted-text" style={{ fontSize: 13, marginTop: 4 }}>
+            Reja qiymatlarini boshqarish bo'limi
+          </p>
+        </div>
+        <Link
+          href="/crm"
+          style={{
+            background: "var(--accent)",
+            color: "#000",
+            padding: "9px 20px",
+            borderRadius: 9,
+            fontWeight: 700,
+            fontSize: 13,
+            textDecoration: "none",
+          }}
+        >
+          ← Dashboardga qaytish
+        </Link>
       </div>
-    </main>
+
+      <PlanSettings />
+    </div>
   );
 }

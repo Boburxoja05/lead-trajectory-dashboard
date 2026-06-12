@@ -1,28 +1,79 @@
 export default function FunnelVisual({ data }) {
-  return (
-    <div className="rounded-2xl bg-white p-6 shadow-sm border border-gray-200">
-      <h2 className="text-xl font-bold text-gray-950 mb-5">
-        Funnel vizualizatsiyasi
-      </h2>
+  const colors = [
+    "var(--blue)",
+    "#818cf8",
+    "var(--purple)",
+    "var(--accent)",
+    "#fb923c",
+    "var(--red)",
+    "var(--green)",
+  ];
 
-      <div className="space-y-4">
+  return (
+    <div className="card p-5">
+      <h2 className="card-title">Lid funnel</h2>
+      <p className="card-subtitle" style={{ marginBottom: 20 }}>
+        Har bir bosqichdagi lid soni va konversiyasi
+      </p>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         {data.map((item, index) => {
-          const width = index === 0 ? 100 : Number(String(item.bosqichKonversiya).replace(",", "."));
+          const width = index === 0
+            ? 100
+            : Number(String(item.bosqichKonversiya).replace(",", "."));
 
           return (
-            <div key={item.status} className="grid grid-cols-[170px_1fr_90px] items-center gap-4">
-              <p className="text-sm font-semibold text-gray-700">{item.status}</p>
+            <div key={item.status} style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              <p
+                style={{
+                  color: "var(--muted)",
+                  fontSize: 11,
+                  fontWeight: 600,
+                  width: 140,
+                  flexShrink: 0,
+                  textAlign: "right",
+                }}
+              >
+                {item.status}
+              </p>
 
-              <div className="h-8 rounded-xl bg-slate-100 overflow-hidden">
+              <div
+                style={{
+                  flex: 1,
+                  height: 32,
+                  background: "var(--border)",
+                  borderRadius: 8,
+                  overflow: "hidden",
+                }}
+              >
                 <div
-                  className="h-full rounded-xl bg-blue-500 flex items-center px-3 text-white text-sm font-bold"
-                  style={{ width: `${Math.max(Math.min(width, 100), 5)}%` }}
+                  style={{
+                    width: `${Math.max(Math.min(width, 100), 4)}%`,
+                    height: "100%",
+                    background: colors[index % colors.length],
+                    borderRadius: 8,
+                    display: "flex",
+                    alignItems: "center",
+                    paddingLeft: 10,
+                    transition: "width 0.5s ease",
+                  }}
                 >
-                  {item.soni}
+                  <span style={{ color: "#000", fontSize: 12, fontWeight: 700, whiteSpace: "nowrap" }}>
+                    {item.soni}
+                  </span>
                 </div>
               </div>
 
-              <p className="text-sm font-bold text-gray-800">
+              <p
+                style={{
+                  color: "var(--accent)",
+                  fontSize: 12,
+                  fontWeight: 700,
+                  width: 44,
+                  textAlign: "right",
+                  flexShrink: 0,
+                }}
+              >
                 {item.bosqichKonversiya}%
               </p>
             </div>

@@ -13,55 +13,61 @@ function BarRow({ name, reja, fakt, type = "number", higherIsBetter = true }) {
   const max = Math.max(rejaValue, faktValue, 1);
   const farq = faktValue - rejaValue;
   const yaxshi = higherIsBetter ? farq >= 0 : farq <= 0;
+  const rejaW = (rejaValue / max) * 100;
+  const faktW = (faktValue / max) * 100;
 
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white p-5">
-      <div className="flex items-center justify-between gap-3">
-        <h3 className="font-bold text-gray-950">{name}</h3>
-        <span
-          className={`rounded-full px-3 py-1 text-xs font-bold ${
-            yaxshi ? "bg-green-50 text-green-700" : "bg-red-50 text-red-700"
-          }`}
-        >
-          {yaxshi ? "Rejaga mos" : "E’tibor kerak"}
+    <div
+      style={{
+        background: "var(--panel-3)",
+        border: "1px solid var(--border)",
+        borderRadius: 12,
+        padding: "16px",
+      }}
+    >
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
+        <p style={{ color: "#fff", fontWeight: 700, fontSize: 14 }}>{name}</p>
+        <span className={`badge ${yaxshi ? "badge-green" : "badge-red"}`}>
+          {yaxshi ? "Rejaga mos" : "E'tibor kerak"}
         </span>
       </div>
 
-      <div className="mt-4 space-y-4">
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         <div>
-          <div className="mb-1 flex justify-between text-sm">
-            <span className="font-semibold text-gray-800">Reja</span>
-            <b className="text-gray-950">{formatValue(rejaValue, type)}</b>
+          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 5 }}>
+            <span className="muted-text" style={{ fontSize: 11, fontWeight: 600 }}>REJA</span>
+            <span style={{ color: "var(--muted)", fontSize: 12, fontWeight: 700 }}>{formatValue(rejaValue, type)}</span>
           </div>
-          <div className="h-4 rounded-full bg-slate-100">
-            <div
-              className="h-4 rounded-full bg-gray-700"
-              style={{ width: `${(rejaValue / max) * 100}%` }}
-            />
+          <div className="bar-track">
+            <div style={{ width: `${rejaW}%`, height: "100%", borderRadius: 99, background: "var(--muted)" }} />
           </div>
         </div>
 
         <div>
-          <div className="mb-1 flex justify-between text-sm">
-            <span className="font-semibold text-gray-800">Fakt</span>
-            <b className="text-blue-600">{formatValue(faktValue, type)}</b>
+          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 5 }}>
+            <span className="muted-text" style={{ fontSize: 11, fontWeight: 600 }}>FAKT</span>
+            <span style={{ color: yaxshi ? "var(--green)" : "var(--red)", fontSize: 12, fontWeight: 700 }}>
+              {formatValue(faktValue, type)}
+            </span>
           </div>
-          <div className="h-4 rounded-full bg-slate-100">
+          <div className="bar-track">
             <div
-              className={`h-4 rounded-full ${
-                yaxshi ? "bg-blue-600" : "bg-red-500"
-              }`}
-              style={{ width: `${(faktValue / max) * 100}%` }}
+              style={{
+                width: `${faktW}%`,
+                height: "100%",
+                borderRadius: 99,
+                background: yaxshi ? "var(--green)" : "var(--red)",
+              }}
             />
           </div>
         </div>
       </div>
 
-      <p className="mt-3 text-sm text-gray-500">
+      <p className="muted-text" style={{ fontSize: 11, marginTop: 10 }}>
         Farq:{" "}
-        <b className={yaxshi ? "text-green-600" : "text-red-600"}>
+        <span style={{ color: yaxshi ? "var(--green)" : "var(--red)", fontWeight: 700 }}>
           {formatValue(Math.abs(farq), type)}
-        </b>
+        </span>
       </p>
     </div>
   );
@@ -71,17 +77,13 @@ export default function KPIComparisonChart({ reja, fakt }) {
   const crFakt = Number(String(fakt.cr).replace(",", "."));
 
   return (
-    <section className="rounded-2xl bg-white p-5 shadow-sm border border-gray-200">
-      <h2 className="text-xl font-bold text-gray-950">
-        Reja / Fakt KPI taqqoslash
-      </h2>
-
-      <p className="text-sm text-gray-500 mb-5">
-        Reja va fakt natija bar chart orqali solishtiriladi. Reja — qora chiziq,
-        fakt — ko‘k yoki qizil chiziq.
+    <section className="card p-5">
+      <h2 className="card-title">Reja / Fakt KPI taqqoslash</h2>
+      <p className="card-subtitle" style={{ marginBottom: 18 }}>
+        Reja va fakt natija bar chart orqali solishtiriladi
       </p>
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-5">
+      <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-5">
         <BarRow name="Lid" reja={reja.lid} fakt={fakt.jamiLid} />
         <BarRow name="CPL" reja={reja.cpl} fakt={fakt.cpl} type="money" higherIsBetter={false} />
         <BarRow name="Sotuv" reja={reja.sotuv} fakt={fakt.jamiSotuv} />

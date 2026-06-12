@@ -1,34 +1,58 @@
 export default function AlertSummary({ data }) {
   const alerts = [
     {
-      title: "Menejerlar bo‘yicha risk",
-      text: `${data.zeroSalesManagers} ta menejerda sotuv yo‘q`,
+      label: "Menejer riski",
+      value: `${data.zeroSalesManagers} ta menejer`,
+      sub: "Sotuv yo'q",
+      icon: "👤",
     },
     {
-      title: "Kampaniyalar bo‘yicha risk",
-      text: `${data.zeroRoasCampaigns} ta kampaniya daromad bermayapti`,
+      label: "Kampaniya riski",
+      value: `${data.zeroRoasCampaigns} ta kampaniya`,
+      sub: "Daromad bermayapti",
+      icon: "📢",
     },
     {
-      title: "Javobsiz leadlar",
-      text: `${data.noAnswerLeads} ta lead No Answer holatida`,
+      label: "Javobsiz lidlar",
+      value: `${data.noAnswerLeads} ta lid`,
+      sub: "No Answer holatida",
+      icon: "📵",
     },
     {
-      title: "Konversiya farqi",
-      text: `Reja: ${data.planCr}% · Fakt: ${data.factCr}%`,
+      label: "Konversiya farqi",
+      value: `Fakt: ${data.factCr}%`,
+      sub: `Reja: ${data.planCr}%`,
+      icon: "📉",
     },
   ];
 
   return (
-    <section className="rounded-2xl bg-red-50 border border-red-200 p-5">
-      <h2 className="text-xl font-bold text-red-700">
+    <section className="alert-card p-5">
+      <h2 style={{ color: "#f87171", fontWeight: 700, fontSize: 15, marginBottom: 12 }}>
         ⚠ Diqqat talab qiluvchi holatlar
       </h2>
-
-      <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-4">
+      <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-4">
         {alerts.map((item) => (
-          <div key={item.title} className="rounded-xl bg-white border border-red-100 p-4">
-            <p className="text-sm text-gray-600">{item.title}</p>
-            <h3 className="mt-2 text-lg font-bold text-red-700">{item.text}</h3>
+          <div
+            key={item.label}
+            style={{
+              background: "rgba(0,0,0,0.25)",
+              border: "1px solid rgba(239,68,68,0.2)",
+              borderRadius: 10,
+              padding: "14px 16px",
+              display: "flex",
+              gap: 12,
+              alignItems: "flex-start",
+            }}
+          >
+            <span style={{ fontSize: 20 }}>{item.icon}</span>
+            <div>
+              <p className="muted-text" style={{ fontSize: 11, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em" }}>
+                {item.label}
+              </p>
+              <p style={{ color: "#f87171", fontWeight: 700, fontSize: 16, marginTop: 2 }}>{item.value}</p>
+              <p className="muted-text" style={{ fontSize: 11, marginTop: 1 }}>{item.sub}</p>
+            </div>
           </div>
         ))}
       </div>

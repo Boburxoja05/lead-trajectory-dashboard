@@ -2,45 +2,41 @@ import { pulQiymat } from "@/utils/calculations";
 
 export default function ManagerRating({ data }) {
   return (
-    <div className="rounded-2xl bg-white p-5 shadow-sm border border-gray-200 overflow-x-auto">
-      <h2 className="text-xl font-bold text-gray-950 mb-4">
-        Menejerlar reytingi
-      </h2>
+    <div className="card p-5 overflow-x-auto">
+      <h2 className="card-title" style={{ marginBottom: 4 }}>Menejerlar reytingi</h2>
+      <p className="card-subtitle" style={{ marginBottom: 16 }}>
+        Har bir menejer bo'yicha lid, sotuv va konversiya ko'rsatkichlari
+      </p>
 
-      <table className="w-full min-w-[1000px] text-left text-sm">
+      <table className="table-dark" style={{ minWidth: 860 }}>
         <thead>
-          <tr className="border-b border-gray-300 text-gray-700">
-            <th className="pb-3">Menejer</th>
-            <th className="pb-3">Lid</th>
-            <th className="pb-3">Sotuv</th>
-            <th className="pb-3">Sales CR</th>
-            <th className="pb-3">Revenue</th>
-            <th className="pb-3">O‘rtacha chek</th>
-            <th className="pb-3">Holat</th>
+          <tr>
+            <th>#</th>
+            <th>Menejer</th>
+            <th>Lid</th>
+            <th>Sotuv</th>
+            <th>Sales CR</th>
+            <th>Revenue</th>
+            <th>O'rtacha chek</th>
+            <th>Holat</th>
           </tr>
         </thead>
-
         <tbody>
-          {data.map((item) => {
+          {data.map((item, index) => {
             const xavf = item.sotuv === 0 || Number(String(item.cr).replace(",", ".")) < 5;
-
             return (
-              <tr
-                key={item.menejer}
-                className={`border-b ${
-                  xavf ? "bg-red-50 border-red-100" : "border-gray-100"
-                }`}
-              >
-                <td className="py-4 font-semibold text-gray-950">{item.menejer}</td>
-                <td className="py-4 text-gray-900">{item.lid}</td>
-                <td className="py-4 text-gray-900">{item.sotuv}</td>
-                <td className="py-4 font-bold text-blue-600">{item.cr}%</td>
-                <td className="py-4 font-bold text-green-600">{pulQiymat(item.tushum)}</td>
-                <td className="py-4 text-gray-900">
-                  {pulQiymat(item.sotuv ? item.tushum / item.sotuv : 0)}
-                </td>
-                <td className={`py-4 font-bold ${xavf ? "text-red-700" : "text-green-700"}`}>
-                  {xavf ? "E’tibor kerak" : "Barqaror"}
+              <tr key={item.menejer}>
+                <td className="muted-text">{index + 1}</td>
+                <td style={{ color: "#fff", fontWeight: 600 }}>{item.menejer}</td>
+                <td>{item.lid}</td>
+                <td>{item.sotuv}</td>
+                <td className="blue-text" style={{ fontWeight: 700 }}>{item.cr}%</td>
+                <td className="green-text" style={{ fontWeight: 700 }}>{pulQiymat(item.tushum)}</td>
+                <td>{pulQiymat(item.sotuv ? item.tushum / item.sotuv : 0)}</td>
+                <td>
+                  <span className={`badge ${xavf ? "badge-red" : "badge-green"}`}>
+                    {xavf ? "E'tibor kerak" : "Barqaror"}
+                  </span>
                 </td>
               </tr>
             );

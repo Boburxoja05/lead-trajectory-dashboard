@@ -3,8 +3,8 @@ export default function LostReasons() {
 
   const reasons = [
     { name: "Narx juda qimmat", percent: 34 },
-    { name: "Telefon ko‘tarmadi", percent: 28 },
-    { name: "Hozir vaqti yo‘q", percent: 18 },
+    { name: "Telefon ko'tarmadi", percent: 28 },
+    { name: "Hozir vaqti yo'q", percent: 18 },
     { name: "Raqobatchini tanladi", percent: 12 },
     { name: "Follow-up kelmadi", percent: 8 },
   ].map((item) => ({
@@ -12,43 +12,51 @@ export default function LostReasons() {
     count: Math.round((totalLost * item.percent) / 100),
   }));
 
+  const barColors = [
+    "var(--red)",
+    "#fb923c",
+    "var(--accent)",
+    "var(--purple)",
+    "var(--muted)",
+  ];
+
   return (
-    <div className="rounded-2xl bg-white p-6 shadow-sm border border-gray-200">
-      <h2 className="text-xl font-bold text-gray-950">
-        Yo‘qolish sabablari
-      </h2>
-      <p className="text-sm text-gray-500 mb-5">
-        Sotuvga o‘tmagan lidlarning asosiy yo‘qolish sabablari.
+    <div className="card p-5">
+      <h2 className="card-title">Yo'qolish sabablari</h2>
+      <p className="card-subtitle" style={{ marginBottom: 18 }}>
+        Sotuvga o'tmagan lidlarning asosiy yo'qolish sabablari
       </p>
 
-      <div className="space-y-4">
-        {reasons.map((item) => (
+      <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+        {reasons.map((item, i) => (
           <div key={item.name}>
-            <div className="flex justify-between mb-1">
-              <p className="text-sm font-semibold text-gray-700">
-                {item.name}
-              </p>
-              <p className="text-sm font-bold text-gray-950">
-                {item.percent}% · {item.count} lid
+            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 5 }}>
+              <p style={{ color: "var(--text)", fontSize: 13, fontWeight: 500 }}>{item.name}</p>
+              <p style={{ color: "#fff", fontSize: 13, fontWeight: 700 }}>
+                {item.percent}%
+                <span className="muted-text" style={{ fontWeight: 500, marginLeft: 6 }}>
+                  · {item.count} lid
+                </span>
               </p>
             </div>
-
-            <div className="h-3 rounded-full bg-slate-100 overflow-hidden">
-              <div
-                className="h-full rounded-full bg-red-500"
-                style={{ width: `${item.percent}%` }}
-              />
+            <div className="bar-track">
+              <div style={{ width: `${item.percent}%`, height: "100%", borderRadius: 99, background: barColors[i] }} />
             </div>
           </div>
         ))}
       </div>
 
-      <div className="mt-6 border-t pt-5">
-        <p className="text-sm text-gray-600">Show rate</p>
-        <h3 className="text-3xl font-bold text-gray-950">71%</h3>
-        <p className="text-sm text-gray-500">
-          78 keldi / 110 belgilangan uchrashuv
-        </p>
+      <hr className="divider" style={{ margin: "18px 0" }} />
+
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
+        <div>
+          <p className="metric-label">Show rate</p>
+          <p style={{ color: "#fff", fontSize: 28, fontWeight: 800, letterSpacing: "-0.03em", margin: "4px 0 2px" }}>
+            71%
+          </p>
+          <p className="muted-text" style={{ fontSize: 11 }}>78 keldi / 110 belgilangan uchrashuv</p>
+        </div>
+        <span className="badge badge-amber">Yaxshilash mumkin</span>
       </div>
     </div>
   );

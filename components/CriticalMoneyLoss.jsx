@@ -1,47 +1,53 @@
 import { pulQiymat } from "@/utils/calculations";
 
 export default function CriticalMoneyLoss({ data }) {
+  const items = [
+    {
+      label: "Risk ostidagi lidlar",
+      value: data.yoqotilgan,
+      sub: "Sotuvga o'tmay qolgan",
+      color: "var(--accent)",
+    },
+    {
+      label: "Potensial sotuv",
+      value: data.potensialSotuv,
+      sub: "Qayta ishlansa yopilishi mumkin",
+      color: "#fff",
+    },
+    {
+      label: "Tiklanishi mumkin",
+      value: pulQiymat(data.potensialTushum),
+      sub: "Potensial tushum",
+      color: "var(--green)",
+    },
+  ];
+
   return (
-    <section className="rounded-2xl bg-orange-50 border border-orange-200 p-5">
-      <h2 className="text-xl font-bold text-orange-700">
-        O‘sish imkoniyatlari
+    <section className="opportunity-card p-5">
+      <h2 style={{ color: "var(--accent)", fontWeight: 700, fontSize: 15, marginBottom: 4 }}>
+        ◈ O'sish imkoniyatlari
       </h2>
-
-      <p className="mt-1 text-sm text-gray-600">
-        Bu blok yo‘qotilgan yoki javobsiz qolgan leadlarni qayta ishlash orqali
-        qancha qo‘shimcha sotuv va tushum olish mumkinligini ko‘rsatadi.
+      <p className="muted-text" style={{ fontSize: 12, marginBottom: 14 }}>
+        Yo'qotilgan yoki javobsiz lidlarni qayta ishlash orqali qo'shimcha tushum olish mumkin.
       </p>
-
-      <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-3">
-        <div className="rounded-xl bg-white border border-orange-100 p-5">
-          <p className="text-sm text-gray-600">Risk ostidagi leadlar</p>
-          <h3 className="mt-2 text-3xl font-bold text-orange-700">
-            {data.yoqotilgan}
-          </h3>
-          <p className="mt-1 text-xs text-gray-500">
-            Sotuvga o‘tmay qolgan leadlar
-          </p>
-        </div>
-
-        <div className="rounded-xl bg-white border border-orange-100 p-5">
-          <p className="text-sm text-gray-600">Potensial sotuv</p>
-          <h3 className="mt-2 text-3xl font-bold text-gray-950">
-            {data.potensialSotuv}
-          </h3>
-          <p className="mt-1 text-xs text-gray-500">
-            Qayta ishlansa yopilishi mumkin
-          </p>
-        </div>
-
-        <div className="rounded-xl bg-white border border-orange-100 p-5">
-          <p className="text-sm text-gray-600">Potensial tushum</p>
-          <h3 className="mt-2 text-3xl font-bold text-green-600">
-            {pulQiymat(data.potensialTushum)}
-          </h3>
-          <p className="mt-1 text-xs text-gray-500">
-            Tiklanishi mumkin bo‘lgan qiymat
-          </p>
-        </div>
+      <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+        {items.map((item) => (
+          <div
+            key={item.label}
+            style={{
+              background: "rgba(0,0,0,0.25)",
+              border: "1px solid rgba(245,158,11,0.2)",
+              borderRadius: 10,
+              padding: "16px",
+            }}
+          >
+            <p className="metric-label">{item.label}</p>
+            <p style={{ color: item.color, fontWeight: 800, fontSize: 28, letterSpacing: "-0.03em", margin: "6px 0 2px" }}>
+              {item.value}
+            </p>
+            <p className="muted-text" style={{ fontSize: 11 }}>{item.sub}</p>
+          </div>
+        ))}
       </div>
     </section>
   );
