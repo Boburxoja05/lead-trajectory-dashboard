@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 const links = [
   { href: "/crm", label: "CRM Dashboard" },
   { href: "/ads", label: "FB Ads Dashboard" },
+  { href: "/settings", label: "Sozlamalar" },
 ];
 
 export default function NavBar() {
